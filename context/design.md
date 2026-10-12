@@ -17,7 +17,7 @@ This web tool will be a Github Pages deployment with just a few users every once
 - Cleanup converts known whitespace entities (`&nbsp;`, `&#160;`, `&#xA0;`, `&Tab;`, `$nbsp;`, `$tab;`), Unicode spaces, and tabs to ordinary spaces. Repeated spaces and line-edge spaces are removed. Line endings are standardized. Soft hyphens, zero-width spaces, word joiners, and byte-order marks are removed; emoji and language joiners remain unchanged.
 - Markdown cleanup is opt-in and uses Marked tokens, not rendered HTML. It removes formatting syntax while retaining list items, text, and link/image destinations. Code indentation is not preserved by whitespace cleanup. Literal Markdown-like text can change under this option; keep it off when exact syntax matters.
 - Output uses a monospaced font, horizontal scrolling, line numbers, and a synchronized column ruler. Header displays the current line's length and longest line. Lengths count Unicode code points, not bytes or visual display columns; wide characters and combined emoji may occupy different widths.
-- Nothing is stored or uploaded. Dependencies are pinned and bundled locally: Marked 12.0.2 and Lucide 0.468.0. Their licenses are retained under `vendor/`.
+- No text is stored or uploaded. Light/dark mode defaults to the browser's `prefers-color-scheme` setting, including Safari, and follows system changes until a theme is selected manually. Only the explicit theme preference is saved locally. Blocked storage does not prevent switching themes; older Safari media-query listeners are supported. Dependencies are pinned and bundled locally: Marked 12.0.2 and Lucide 0.468.0. Their licenses are retained under `vendor/`.
 
 ## Preview And Verification
 

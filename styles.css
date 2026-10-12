@@ -5,7 +5,41 @@
   --green: #216348;
   --orange: #c85530;
   --surface: #fff;
+  --page: #f4f6f3;
+  --pattern: #e9ede740;
+  --result: #f9fcf9;
+  --gutter: #eef3ed;
+  --gutter-ink: #738074;
+  --hover: #f1f4f0;
+  --danger-hover: #f9eee9;
+  --switch: #ced5cf;
+  --brand: #222923;
+  --on-brand: #fff;
+  --on-green: #fff;
+  --green-hover: #184b36;
   --mono: "Cascadia Mono", "Consolas", "Liberation Mono", monospace;
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --ink: #e7ece8;
+  --muted: #a9b5ad;
+  --line: #3b443e;
+  --green: #80c9a3;
+  --orange: #f59a7b;
+  --surface: #222725;
+  --page: #181b1a;
+  --pattern: #333c3540;
+  --result: #242c27;
+  --gutter: #1d231f;
+  --gutter-ink: #a9b5ad;
+  --hover: #303933;
+  --danger-hover: #42312c;
+  --switch: #56645b;
+  --brand: #e7ece8;
+  --on-brand: #181b1a;
+  --on-green: #13291d;
+  --green-hover: #9cdbb9;
+  color-scheme: dark;
 }
 * {
   box-sizing: border-box;
@@ -13,13 +47,13 @@
 body {
   margin: 0;
   color: var(--ink);
-  background: #f4f6f3;
+  background: var(--page);
   background-image: repeating-linear-gradient(
     0deg,
     transparent,
     transparent 39px,
-    #e9ede740 39px,
-    #e9ede740 40px
+    var(--pattern) 39px,
+    var(--pattern) 40px
   );
   font-family: "Aptos", "Segoe UI", sans-serif;
   font-size: 14px;
@@ -53,6 +87,25 @@ main {
   gap: 24px;
   margin-bottom: 40px;
 }
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+#theme-toggle {
+  flex-shrink: 0;
+}
+#theme-toggle:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.theme-sun,
+:root[data-theme="dark"] .theme-moon {
+  display: none;
+}
+:root[data-theme="dark"] .theme-sun {
+  display: block;
+}
 .brand {
   display: flex;
   align-items: center;
@@ -64,8 +117,8 @@ main {
   height: 42px;
   display: grid;
   place-items: center;
-  background: var(--ink);
-  color: white;
+  background: var(--brand);
+  color: var(--on-brand);
   border-radius: 6px;
   flex-shrink: 0;
 }
@@ -141,7 +194,7 @@ svg {
   height: 20px;
   width: 34px;
   border-radius: 10px;
-  background: #ced5cf;
+  background: var(--switch);
   position: relative;
   flex-shrink: 0;
   transition: background 0.15s;
@@ -183,7 +236,7 @@ svg {
   min-height: 32px;
 }
 .subtle:hover {
-  background: #f1f4f0;
+  background: var(--hover);
   color: var(--ink);
 }
 .editors {
@@ -197,7 +250,7 @@ svg {
   border-right: 1px solid var(--line);
 }
 .result {
-  background: #f9fcf9;
+  background: var(--result);
 }
 .editor-heading {
   display: flex;
@@ -232,7 +285,7 @@ svg {
   color: var(--muted);
 }
 .icon-button:hover:not(:disabled) {
-  background: #f9eee9;
+  background: var(--danger-hover);
   color: var(--orange);
 }
 .result-state {
@@ -279,7 +332,7 @@ textarea:focus {
   display: grid;
   place-items: center;
   font: 9px var(--mono);
-  background: #eef3ed;
+  background: var(--gutter);
   border-right: 1px solid var(--line);
 }
 #ruler-scroll {
@@ -309,8 +362,8 @@ textarea:focus {
   padding: 12px 10px 12px 0;
   text-align: right;
   font: 14px/24px var(--mono);
-  color: #738074;
-  background: #eef3ed;
+  color: var(--gutter-ink);
+  background: var(--gutter);
   border-right: 1px solid var(--line);
   overflow: hidden;
   user-select: none;
@@ -355,11 +408,11 @@ textarea:focus {
 }
 .primary {
   background: var(--green);
-  color: white;
+  color: var(--on-green);
   min-width: 138px;
 }
 .primary:hover:not(:disabled) {
-  background: #184b36;
+  background: var(--green-hover);
 }
 #notice {
   margin: 0;

@@ -7,6 +7,31 @@ const clear = document.getElementById('clear');
 const notice = document.getElementById('notice');
 const gutter = document.getElementById('line-numbers');
 const ruler = document.getElementById('ruler-scroll');
+const themeToggle = document.getElementById('theme-toggle');
+const themeMedia = matchMedia('(prefers-color-scheme: dark)');
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  themeToggle.setAttribute('aria-pressed', String(theme === 'dark'));
+  themeToggle.title = `Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`;
+}
+
+themeToggle.addEventListener('click', () => {
+  const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.themePreference = theme;
+  applyTheme(theme);
+  try { localStorage.setItem('normalizer-theme', theme); } catch {}
+});
+function handleSystemThemeChange(event) {
+  if (!document.documentElement.dataset.themePreference) applyTheme(event.matches ? 'dark' : 'light');
+}
+if (typeof themeMedia.addEventListener === 'function') {
+  themeMedia.addEventListener('change', handleSystemThemeChange);
+} else {
+  themeMedia.addListener(handleSystemThemeChange);
+}
+applyTheme(document.documentElement.dataset.theme);
+
 let copyTimer;
 let revision = 0;
 let lineLengths = [0];

@@ -3,9 +3,18 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="color-scheme" content="light">
+	<meta name="color-scheme" content="light dark">
 	<meta name="description" content="A local, deterministic text normalizer for email copy.">
 	<title>Please just be normal</title>
+	<script>
+		let savedTheme;
+		try { savedTheme = localStorage.getItem('normalizer-theme'); } catch {}
+		if (savedTheme === 'light' || savedTheme === 'dark') {
+			document.documentElement.dataset.themePreference = savedTheme;
+		}
+		document.documentElement.dataset.theme = document.documentElement.dataset.themePreference ||
+			(matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+	</script>
 	<link rel="stylesheet" href="styles.css">
 	<script src="vendor/marked.js" defer></script>
 	<script src="vendor/lucide.js" defer></script>
@@ -16,8 +25,9 @@
 	<main>
 		<header class="masthead" style="flex-direction: column; justify-content: space-between;">
 			<div class="brand"><h1>Please just be normal<span class="period">.</span></h1></div>
-            <div>
+			<div class="header-tools">
                 <span>Text normalizer</span>
+				<button id="theme-toggle" class="icon-button" type="button" aria-label="Dark mode" aria-pressed="false" title="Switch to dark mode"><i data-lucide="moon" class="theme-moon" aria-hidden="true"></i><i data-lucide="sun" class="theme-sun" aria-hidden="true"></i></button>
             </div>
 		</header>
 		<section class="workspace" aria-label="Text normalizer">
