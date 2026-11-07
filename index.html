@@ -5,6 +5,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="color-scheme" content="light dark">
 	<meta name="description" content="A local, deterministic text normalizer for email copy.">
+	<meta name="theme-color" content="#f4f6f3">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="default">
+	<meta name="apple-mobile-web-app-title" content="Be normal">
+	<link rel="manifest" href="./manifest.webmanifest">
+	<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+	<link rel="icon" type="image/svg+xml" sizes="any" href="./icons/icon.svg">
+	<link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
 	<title>Please just be normal</title>
 	<script>
 		let savedTheme;
@@ -40,8 +48,11 @@
 			<div class="editors">
 				<section class="editor source">
 					<div class="editor-heading"><label for="input"><span class="step">01</span>Original</label><button id="clear" class="icon-button" aria-label="Clear original text" title="Clear original text" disabled><i data-lucide="trash-2" aria-hidden="true"></i></button></div>
-					<textarea id="input" spellcheck="false" aria-label="Original text"></textarea>
-					<div class="editor-footer"><span id="input-count">0 characters</span><span class="format-label">SOURCE TEXT</span></div>
+					<div class="source-editor">
+						<div id="input-highlights" aria-hidden="true"></div>
+						<textarea id="input" spellcheck="false" aria-label="Original text" aria-describedby="highlight-hint"></textarea>
+					</div>
+					<div class="editor-footer"><span id="input-count">0 characters</span><span id="highlight-hint" class="format-label">CYAN = CLEANUP</span></div>
 				</section>
 				<section class="editor result">
 					<div class="editor-heading"><label for="output"><span class="step">02</span>Normalized</label><span id="result-state" class="result-state">Ready</span></div>

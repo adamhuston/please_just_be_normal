@@ -1,4 +1,5 @@
 const input = document.getElementById('input');
+const inputHighlights = document.getElementById('input-highlights');
 const output = document.getElementById('output');
 const joinLines = document.getElementById('join-lines');
 const markdown = document.getElementById('markdown');
@@ -12,6 +13,7 @@ const themeMedia = matchMedia('(prefers-color-scheme: dark)');
 
 function applyTheme(theme) {
   document.documentElement.dataset.theme = theme;
+  document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#181b1a' : '#f4f6f3';
   themeToggle.setAttribute('aria-pressed', String(theme === 'dark'));
   themeToggle.title = `Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`;
 }
@@ -64,11 +66,42 @@ function updateLineInfo() {
   syncScroll();
 }
 
+function syncInputScroll() {
+  inputHighlights.scrollTop = input.scrollTop;
+  inputHighlights.scrollLeft = input.scrollLeft;
+}
+
+function updateHighlights(ranges) {
+  const fragment = document.createDocumentFragment();
+  let cursor = 0;
+  for (const { start, end } of ranges) {
+    fragment.append(document.createTextNode(input.value.slice(cursor, start)));
+    const mark = document.createElement('mark');
+    const text = input.value.slice(start, end);
+    for (const character of text) {
+      if (/[\u00ad\u200b\u2060\ufeff\r\n\u0085\u2028\u2029]/.test(character)) {
+        const marker = document.createElement('span');
+        marker.className = 'cleanup-marker';
+        marker.textContent = character;
+        mark.append(marker);
+      } else {
+        mark.append(document.createTextNode(character));
+      }
+    }
+    fragment.append(mark);
+    cursor = end;
+  }
+  fragment.append(document.createTextNode(input.value.slice(cursor) + '\n'));
+  inputHighlights.replaceChildren(fragment);
+  syncInputScroll();
+}
+
 function update() {
   revision += 1;
   clearTimeout(copyTimer);
   const result = normalizeText(input.value, { joinLines: joinLines.checked, stripMarkdown: markdown.checked });
   output.value = result.text;
+  updateHighlights(result.highlights);
   const labels = { artifacts: 'artifacts replaced', spaces: 'spaces normalized', invisible: 'invisibles removed', lineEndings: 'line endings normalized', joined: 'lines joined' };
   const changes = Object.entries(result.counts).filter(([, count]) => count).map(([key, count]) => `${count} ${labels[key]}`);
   if (markdown.checked && normalizeText(input.value).text !== result.text) changes.push('Markdown cleaned');
@@ -86,6 +119,7 @@ function update() {
 }
 
 input.addEventListener('input', update);
+input.addEventListener('scroll', syncInputScroll);
 joinLines.addEventListener('change', update);
 markdown.addEventListener('change', update);
 output.addEventListener('scroll', syncScroll);
@@ -96,7 +130,7 @@ document.getElementById('sample').addEventListener('click', () => {
     notice.textContent = 'Clear original text before loading sample.';
     return;
   }
-  input.value = '# Team update\n\nHello\u00a0\u00a0team,\nHere is our **weekly update**.\n\n- Campaign\tresults are ready.\n- Next&nbsp;steps are on track.\n\nRead the [report](https://example.com/report).\n\nThanks,\nThe team\u200b';
+  input.value = '# Subject: Dispatch from Spain, pending approval by reality\n\nDear\u00a0\u00a0Editor,\nBarcelona has a shortage of bread and a surplus of **official explanations**.\nI enclose the [dispatch](https://example.com/dispatch); please don\'t improve the facts.\nThey have already been improved by three newspapers and a committee.\n\nA few *editorial notes*:\n- The\tcensor has approved every sentence except the informative ones.\n- Our&nbsp;latest victory is still looking for a suitable event.\n- My expense$tab;claim is the only document all factions agree is fiction.\n\nYou asked for local\u200b colour. The coffee is brown;\nthe political distinctions are rather less reliable.\nPlease retain \"perhaps.\" It is the best-sourced word in the piece.\n\nYours,\nGeorge\n\n';
   update();
   input.focus();
 });
